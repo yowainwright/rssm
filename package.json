@@ -1,0 +1,104 @@
+{
+  "name": "rsssm",
+  "version": "1.0.0",
+  "description": "React Simple Schema State Machine - Type-safe state management with Zod validation and CLI generator",
+  "main": "./dist/index.js",
+  "module": "./dist/index.mjs",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.js"
+    }
+  },
+  "bin": {
+    "rsssm": "./cli/bin/rsssm.js"
+  },
+  "type": "module",
+  "files": [
+    "dist",
+    "cli",
+    "README.md",
+    "LICENSE"
+  ],
+  "engines": {
+    "node": ">=18"
+  },
+  "scripts": {
+    "build": "bun run build:lib && bun run build:cli",
+    "build:lib": "tsup",
+    "build:cli": "tsup --config cli/tsup.config.ts",
+    "dev": "tsup --watch",
+    "dev:cli": "tsup --config cli/tsup.config.ts --watch",
+    "dev:site": "cd site && bun run dev",
+    "test": "bun test",
+    "test:watch": "bun test --watch",
+    "format": "prettier --write \"src/**/*.{ts,tsx}\" \"cli/src/**/*.{ts,tsx}\" \"site/src/**/*.{ts,tsx}\"",
+    "lint": "oxlint src cli/src site/src",
+    "prepublishOnly": "bun run build",
+    "clean": "rm -rf dist cli/dist site/.next .turbo"
+  },
+  "dependencies": {
+    "@inquirer/prompts": "^7.2.0",
+    "boxen": "^8.0.1",
+    "chalk": "^5.3.0",
+    "cli-highlight": "^2.1.11",
+    "commander": "^12.0.0",
+    "figlet": "^1.8.2",
+    "gradient-string": "^3.0.0",
+    "ora": "^8.2.0"
+  },
+  "devDependencies": {
+    "@radix-ui/react-label": "^2.1.7",
+    "@radix-ui/react-slot": "^1.2.3",
+    "@testing-library/react": "^16.3.0",
+    "@testing-library/react-hooks": "^8.0.1",
+    "@types/bun": "latest",
+    "@types/figlet": "^1.7.0",
+    "@types/node": "^20.0.0",
+    "@types/react": "^19.1.8",
+    "@types/react-dom": "^19.1.6",
+    "autoprefixer": "^10.4.21",
+    "class-variance-authority": "^0.7.1",
+    "clsx": "^2.1.1",
+    "eslint": "^9",
+    "eslint-config-next": "15.4.4",
+    "next": "15.4.4",
+    "oxlint": "^1.8.0",
+    "postcss": "^8.5.6",
+    "prettier": "^3.6.2",
+    "react": "19.1.0",
+    "react-dom": "19.1.0",
+    "tailwind-merge": "^3.3.1",
+    "tailwindcss": "^3",
+    "tsup": "^8.5.0",
+    "typescript": "^5.8.3",
+    "zod": "^3.23.0"
+  },
+  "peerDependencies": {
+    "react": ">=16",
+    "react-dom": ">=16",
+    "zod": ">=3"
+  },
+  "keywords": [
+    "react",
+    "state",
+    "management",
+    "schema",
+    "zod",
+    "typescript",
+    "cli",
+    "generator"
+  ],
+  "author": "",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/yourusername/rsssm.git"
+  },
+  "bugs": {
+    "url": "https://github.com/yourusername/rsssm/issues"
+  },
+  "homepage": "https://github.com/yourusername/rsssm#readme"
+}

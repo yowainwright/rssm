@@ -82,6 +82,14 @@ out
 .nuxt
 dist
 
+# RSSSM specific
+cli/dist/
+demo/.next/
+site/.next/
+.turbo
+turbo-*.log
+bun-debug.log*
+
 # Gatsby files
 .cache/
 # Comment in the public line in if your project uses Gatsby and not Next.js
