@@ -1,4 +1,6 @@
-# RSSM - React Simple Schema State Machine
+# rssm 
+
+> React Simple Schema State Machine
 
 A lightweight, type-safe state management solution for React applications with built-in localStorage persistence, schema validation, logging capabilities, and a powerful CLI generator.
 
@@ -18,10 +20,6 @@ A lightweight, type-safe state management solution for React applications with b
 
 ```bash
 npm install rsssm
-# or
-yarn add rsssm
-# or
-bun add rsssm
 ```
 
 ### Peer Dependencies
