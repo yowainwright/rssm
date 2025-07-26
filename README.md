@@ -1,6 +1,6 @@
 # rssm 
 
-> React Simple Schema State Machine
+> React Schema State Machine
 
 A lightweight, type-safe state management solution for React applications with built-in localStorage persistence, schema validation, logging capabilities, and a powerful CLI generator.
 
