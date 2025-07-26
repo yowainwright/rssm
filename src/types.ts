@@ -32,6 +32,7 @@ export interface RssmProviderProps<T> {
   encrypt?: boolean;
   logging?: boolean;
   logger?: Logger;
+  debounceDelay?: number;
 }
 
 export interface RssmConfig<T> {

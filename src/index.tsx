@@ -1,5 +1,7 @@
-import React, { createContext, useContext, useReducer } from "react";
-import { storage } from "./storage";
+import React, { createContext, useContext, useReducer, useEffect } from "react";
+import { useDebouncedCallback } from "use-debounce";
+import isEqual from "react-fast-compare";
+import storage from 'localstorage-slim';
 import type {
   Action,
   State,
@@ -12,7 +14,10 @@ import type {
 /**
  * Generic reducer for rssm with localStorage support and schema validation
  */
-function createReducer<T>(config: RssmConfig<T>) {
+function createReducer<T>(
+  config: RssmConfig<T>,
+  debouncedPersist: (state: State<T>) => void
+) {
   const log = config.logger || console;
   
   return (state: State<T>, action: Action<T>): State<T> => {
@@ -40,9 +45,10 @@ function createReducer<T>(config: RssmConfig<T>) {
           error: null,
         };
         
+        // For CREATE/READ, persist immediately (no debounce)
         if (config.persist) {
           try {
-            storage.set(config.name, newState, { ttl: config.ttl, encrypt: config.encrypt });
+            storage.set(config.name, newState, { ttl: config.ttl || 0, encrypt: config.encrypt });
             if (config.logging) {
               log.info(`[${config.name}] Persisted to localStorage`);
             }
@@ -57,13 +63,23 @@ function createReducer<T>(config: RssmConfig<T>) {
       }
 
       case "UPDATE": {
-        let data = state.data 
-          ? { ...state.data, ...(action.payload as Partial<T>) }
+        // Check if we actually need to update
+        const currentData = state.data;
+        let newData = currentData 
+          ? { ...currentData, ...(action.payload as Partial<T>) }
           : (action.payload as T);
+        
+        // Use fast compare to check if data actually changed
+        if (currentData && isEqual(currentData, newData)) {
+          if (config.logging) {
+            log.info(`[${config.name}] No changes detected, skipping update`);
+          }
+          return state;
+        }
         
         // Try to validate updated data against schema
         try {
-          data = config.schema.parse(data);
+          newData = config.schema.parse(newData);
         } catch (error) {
           if (config.logging) {
             log.warn(`[${config.name}] Schema validation failed on update, using unvalidated data:`, error);
@@ -72,21 +88,13 @@ function createReducer<T>(config: RssmConfig<T>) {
         
         const newState = {
           ...state,
-          data,
+          data: newData,
           error: null,
         };
         
+        // Use debounced persist for updates
         if (config.persist) {
-          try {
-            storage.set(config.name, newState, { ttl: config.ttl, encrypt: config.encrypt });
-            if (config.logging) {
-              log.info(`[${config.name}] Updated in localStorage`);
-            }
-          } catch (error) {
-            if (config.logging) {
-              log.error(`[${config.name}] Failed to update localStorage:`, error);
-            }
-          }
+          debouncedPersist(newState);
         }
         
         return newState;
@@ -116,41 +124,41 @@ function createReducer<T>(config: RssmConfig<T>) {
       }
 
       case "SET_LOADING": {
+        // Only update if loading state actually changed
+        if (state.loading === (action.payload as boolean)) {
+          return state;
+        }
+        
         const newState = {
           ...state,
           loading: action.payload as boolean,
         };
         
+        // Use debounced persist for loading state changes
         if (config.persist) {
-          try {
-            storage.set(config.name, newState, { ttl: config.ttl, encrypt: config.encrypt });
-          } catch (error) {
-            if (config.logging) {
-              log.error(`[${config.name}] Failed to persist loading state:`, error);
-            }
-          }
+          debouncedPersist(newState);
         }
         
         return newState;
       }
 
       case "SET_ERROR": {
+        // Only update if error actually changed
+        if (state.error === (action.payload as string | null)) {
+          return state;
+        }
+        
         const newState = {
           ...state,
           error: action.payload as string | null,
           loading: false,
         };
         
+        // Use debounced persist for error state changes
         if (config.persist) {
-          try {
-            storage.set(config.name, newState, { ttl: config.ttl, encrypt: config.encrypt });
-            if (config.logging && action.payload) {
-              log.warn(`[${config.name}] Error state persisted:`, action.payload);
-            }
-          } catch (error) {
-            if (config.logging) {
-              log.error(`[${config.name}] Failed to persist error state:`, error);
-            }
+          debouncedPersist(newState);
+          if (config.logging && action.payload) {
+            log.warn(`[${config.name}] Error state will be persisted:`, action.payload);
           }
         }
         
@@ -201,16 +209,35 @@ export function createRssm<T>(name: string) {
     ttl = null,
     encrypt = false,
     logging = false,
-    logger = console
+    logger = console,
+    debounceDelay = 500
   }: RssmProviderProps<T>) {
     const config: RssmConfig<T> = { name, schema, persist, ttl, encrypt, logging, logger };
-    const reducer = createReducer<T>(config);
+    
+    // Create debounced persist function
+    const debouncedPersist = useDebouncedCallback(
+      (state: State<T>) => {
+        try {
+          storage.set(config.name, state, { ttl: config.ttl || 0, encrypt: config.encrypt });
+          if (config.logging) {
+            logger.info(`[${config.name}] Debounced persist to localStorage`);
+          }
+        } catch (error) {
+          if (config.logging) {
+            logger.error(`[${config.name}] Failed to persist to localStorage:`, error);
+          }
+        }
+      },
+      debounceDelay
+    );
+    
+    const reducer = createReducer<T>(config, debouncedPersist);
     
     // Load initial state from localStorage if persist is enabled
     const getInitialState = (): State<T> => {
       if (persist) {
         try {
-          const stored = storage.get<State<T>>(name, { decrypt: encrypt });
+          const stored = storage.get<State<T>>(name);
           if (stored && stored.data) {
             // Try to validate stored data against schema
             try {
@@ -252,6 +279,14 @@ export function createRssm<T>(name: string) {
     };
     
     const [state, dispatch] = useReducer(reducer, getInitialState());
+    
+    // Cleanup on unmount
+    useEffect(() => {
+      return () => {
+        // Flush any pending debounced writes
+        debouncedPersist.flush();
+      };
+    }, [debouncedPersist]);
 
     return (
       <Context.Provider value={{ state, dispatch }}>
@@ -295,5 +330,5 @@ export type {
   RssmHookReturn, 
   State, 
   Logger,
-  RSSMActions 
+  RssmActions 
 } from "./types";
