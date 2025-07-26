@@ -47,7 +47,10 @@
     "commander": "^12.0.0",
     "figlet": "^1.8.2",
     "gradient-string": "^3.0.0",
-    "ora": "^8.2.0"
+    "localstorage-slim": "^2.7.1",
+    "ora": "^8.2.0",
+    "react-fast-compare": "^3.2.2",
+    "use-debounce": "^10.0.5"
   },
   "devDependencies": {
     "@radix-ui/react-label": "^2.1.7",
@@ -64,6 +67,7 @@
     "clsx": "^2.1.1",
     "eslint": "^9",
     "eslint-config-next": "15.4.4",
+    "happy-dom": "^18.0.1",
     "next": "15.4.4",
     "oxlint": "^1.8.0",
     "postcss": "^8.5.6",
