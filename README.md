@@ -1,25 +1,31 @@
 # rssm 
 
-> React Simple Schema State Machine
+> React Schema State Machine
 
-A lightweight, type-safe state management solution for React applications with built-in localStorage persistence, schema validation, logging capabilities, and a powerful CLI generator.
+A lightweight, type-safe state management solution for React applications with localStorage persistence, schema validation, logging capabilities, and a powerful CLI generator.
+
+## Why rssm?
+
+If you're familiar with react context, don't need redux yet, and want a simple schema based state solution with CRUD baked in, rssm is for you.
+
+> And if you use rssm and it is NOT for you, it should be a simple pull request to switch fully to React Context or Redux!
 
 ## Features
 
 - 🔧 **Generic State Management** - Works with any data type using TypeScript generics
-- 💾 **Automatic Persistence** - Built-in localStorage support with encryption and TTL options
+- 💾 **Automatic Persistence** - LocalStorage support with encryption and TTL options
 - ✅ **Schema Validation** - Validates data against Zod schemas (warns but doesn't fail)
 - 📝 **Logging Support** - Optional logging with custom logger support
 - 🎯 **CRUD Operations** - Standard Create, Read, Update, Destroy actions
 - 🔄 **Loading & Error States** - Built-in loading and error state management
-- 🚀 **Lightweight** - Minimal dependencies and small bundle size
-- 🛠️ **CLI Generator** - Beautiful CLI tool for generating state management components
+- 🚀 **Lightweight** - Small bundle size
+- 🛠️ **CLI Generator** - CLI tool for generating state management components
 - 🎨 **Demo App** - Full-featured demo application with shadcn UI
 
 ## Installation
 
 ```bash
-npm install rsssm
+npm install rssm
 ```
 
 ### Peer Dependencies
@@ -28,6 +34,7 @@ Rssm requires the following peer dependencies:
 - `react` (>=16)
 - `react-dom` (>=16)
 - `zod` (>=3)
+- `localstorage-slim` (>=1.3.3)
 
 ## Basic Usage
 
@@ -115,15 +122,15 @@ function OrganizationSelector() {
 
 | Prop | Type | Required | Default | Description |
 |------|------|----------|---------|-------------|
-| `schema` | `z.ZodSchema<T>` | ✅ | - | Zod schema for validating the state data |
-| `name` | `string` | ✅ | - | Unique name for the state (used as localStorage key) |
-| `children` | `ReactNode` | ✅ | - | Child components |
-| `initialData` | `T \| null` | ❌ | `null` | Initial data to populate the state |
-| `persist` | `boolean` | ❌ | `true` | Whether to persist state to localStorage |
-| `ttl` | `number \| null` | ❌ | `null` | Time-to-live in seconds for localStorage |
-| `encrypt` | `boolean` | ❌ | `false` | Whether to encrypt data in localStorage |
-| `logging` | `boolean` | ❌ | `false` | Whether to enable logging |
-| `logger` | `Logger` | ❌ | `console` | Custom logger implementation |
+| `schema` | `z.ZodSchema<T>` | yes | - | Zod schema for validating the state data |
+| `name` | `string` | yes | - | Unique name for the state (used as localStorage key) |
+| `children` | `ReactNode` | yes | - | Child components |
+| `initialData` | `T \| null` | no | `null` | Initial data to populate the state |
+| `persist` | `boolean` | no | `true` | Whether to persist state to localStorage |
+| `ttl` | `number \| null` | no | `null` | Time-to-live in seconds for localStorage |
+| `encrypt` | `boolean` | no | `false` | Whether to encrypt data in localStorage |
+| `logging` | `boolean` | no | `false` | Whether to enable logging |
+| `logger` | `Logger` | no | `console` | Custom logger implementation |
 
 ## Hook Return Value
 
@@ -197,14 +204,14 @@ function App() {
 
 ```tsx
 const customLogger = {
-  info: (message: string, ...args: any[]) => {
+  info: (message: string, ...args: unknown[]) => {
     // Send to logging service
     logService.info(message, args);
   },
-  warn: (message: string, ...args: any[]) => {
+  warn: (message: string, ...args: unknown[]) => {
     logService.warn(message, args);
   },
-  error: (message: string, ...args: any[]) => {
+  error: (message: string, ...args: unknown[]) => {
     logService.error(message, args);
     // Also send to error tracking
     errorTracker.captureMessage(message, { extra: args });
@@ -413,7 +420,7 @@ npx create-rssm example
 
 ### CLI Features
 
-- 🎨 Beautiful terminal UI with syntax highlighting
+- 🎨 Terminal UI with syntax highlighting
 - 📋 Interactive prompts for easy configuration
 - 🔧 Generate from JSON schemas or schema files
 - 💾 Configure persistence, encryption, and TTL
