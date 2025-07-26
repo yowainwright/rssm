@@ -1,6 +1,6 @@
-# RSSSM Examples
+# RSSM Examples
 
-This directory contains example code showing different use cases for RSSSM.
+This directory contains example code showing different use cases for Rssm.
 
 ## Examples
 
@@ -13,13 +13,13 @@ This directory contains example code showing different use cases for RSSSM.
 These are TypeScript files meant to be copied into your project. To use them:
 
 1. Copy the example file to your project
-2. Update the import path for `rsssm`
+2. Update the import path for `rssm`
 3. Integrate with your React components
 
 ## Creating Your Own
 
-Use the CLI to generate customized RSSSM components:
+Use the CLI to generate customized Rssm components:
 
 ```bash
-npx rsssm create
+npx rssm create
 ```

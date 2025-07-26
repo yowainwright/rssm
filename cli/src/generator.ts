@@ -122,27 +122,27 @@ function generateCode(options: GeneratorOptions): string {
   ].filter(Boolean).join('\n      ');
 
   return `${typescript ? "import { z } from 'zod';" : ''}
-import { createRSSSM } from 'rsssm';
+import { createRssm } from 'rssm';
 
 // Define your schema
 ${zodSchema}
 
 // Create the state machine
-const { RSSMProvider, useRSSSM } = createRSSSM${typescript ? `<${typeName}>` : ''}('${name}');
+const { RssmProvider, useRssm } = createRssm${typescript ? `<${typeName}>` : ''}('${name}');
 
 // Export the provider with preset configuration
 export function ${name}Provider({ children }${typescript ? ': { children: React.ReactNode }' : ''}) {
   return (
-    <RSSMProvider
+    <RssmProvider
       ${providerProps}
     >
       {children}
-    </RSSMProvider>
+    </RssmProvider>
   );
 }
 
 // Export the hook for convenience
-export const use${name} = useRSSSM;
+export const use${name} = useRssm;
 
 // Export types${typescript ? `
 export type { ${typeName} };` : ''}

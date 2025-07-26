@@ -5,7 +5,7 @@ import "./globals.css";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "RSSSM - React Simple Schema State Machine",
+  title: "RSSM - React Simple Schema State Machine",
   description: "Type-safe state management for React with Zod validation",
 };
 

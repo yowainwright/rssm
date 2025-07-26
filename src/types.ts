@@ -22,7 +22,7 @@ export interface Logger {
   error: (...args: unknown[]) => void;
 }
 
-export interface RSSMProviderProps<T> {
+export interface RssmProviderProps<T> {
   children: React.ReactNode;
   schema: z.ZodSchema<T>;
   initialData?: T | null;
@@ -34,7 +34,7 @@ export interface RSSMProviderProps<T> {
   logger?: Logger;
 }
 
-export interface RSSMConfig<T> {
+export interface RssmConfig<T> {
   name: string;
   schema: z.ZodSchema<T>;
   persist?: boolean;
@@ -44,12 +44,12 @@ export interface RSSMConfig<T> {
   logger?: Logger;
 }
 
-export interface RSSMContextValue<T> {
+export interface RssmContextValue<T> {
   state: State<T>;
   dispatch: React.Dispatch<Action<T>>;
 }
 
-export interface RSSMActions<T> {
+export interface RssmActions<T> {
   create: (data: T) => void;
   read: (data: T) => void;
   update: (data: Partial<T>) => void;
@@ -59,6 +59,6 @@ export interface RSSMActions<T> {
   reset: () => void;
 }
 
-export interface RSSMHookReturn<T> extends State<T> {
-  actions: RSSMActions<T>;
+export interface RssmHookReturn<T> extends State<T> {
+  actions: RssmActions<T>;
 }

@@ -15,7 +15,7 @@ import { parseJsonSchema } from './schema-parser.js';
 const program = new Command();
 
 // Display banner
-const banner = figlet.textSync('RSSSM', {
+const banner = figlet.textSync('RSSM', {
   font: 'Standard',
   horizontalLayout: 'default',
   verticalLayout: 'default'
@@ -25,13 +25,13 @@ console.log(gradient.pastel.multiline(banner));
 console.log(gradient.pastel('React Simple Schema State Machine CLI\n'));
 
 program
-  .name('rsssm')
+  .name('rssm')
   .description('React Simple Schema State Machine CLI')
   .version('1.0.0');
 
 program
   .command('create')
-  .description('Create a new RSSSM state machine')
+  .description('Create a new Rssm state machine')
   .option('-n, --name <name>', 'State machine name')
   .option('-s, --schema <schema>', 'JSON schema or path to schema file')
   .option('-t, --typescript', 'Generate TypeScript code', true)
@@ -148,7 +148,7 @@ program
       }));
 
       const proceed = await confirm({
-        message: 'Generate RSSSM component with these settings?',
+        message: 'Generate Rssm component with these settings?',
         default: true,
       });
 
@@ -158,7 +158,7 @@ program
       }
 
       // Generate the component
-      const generateSpinner = ora('Generating RSSSM component...').start();
+      const generateSpinner = ora('Generating Rssm component...').start();
       
       try {
         await generateComponent({
@@ -179,7 +179,7 @@ program
       }
 
       // Success message with beautiful formatting
-      const successMessage = gradient.cristal('\n✨ RSSSM component generated successfully!\n');
+      const successMessage = gradient.cristal('\n✨ Rssm component generated successfully!\n');
       console.log(successMessage);
 
       // Next steps in a beautiful box
@@ -212,19 +212,19 @@ program
   .command('example')
   .description('Show example usage')
   .action(() => {
-    console.log(gradient.rainbow('\n📚 RSSSM Example Usage\n'));
+    console.log(gradient.rainbow('\n📚 Rssm Example Usage\n'));
     
     const examples = [
       {
         title: '1. Basic user preferences',
-        command: `rsssm create \\
+        command: `rssm create \\
   --name UserPreferences \\
   --schema '{"theme": "string", "language": "string", "notifications": "boolean"}'`,
         description: 'Simple state for user settings'
       },
       {
         title: '2. Todo list with TTL',
-        command: `rsssm create \\
+        command: `rssm create \\
   --name TodoList \\
   --schema '[{"id": "string", "text": "string", "completed": "boolean"}]' \\
   --ttl 86400`,
@@ -232,7 +232,7 @@ program
       },
       {
         title: '3. Secure user data with encryption',
-        command: `rsssm create \\
+        command: `rssm create \\
   --name UserData \\
   --schema '{"id": "string", "email": "string", "profile": {"name": "string", "avatar": "string"}}' \\
   --encrypt \\
@@ -258,13 +258,13 @@ program
       chalk.blue.bold('💡 Pro Tips:'),
       '',
       '• Use a JSON schema file for complex schemas:',
-      chalk.cyan('  rsssm create --name AppState --schema ./schema.json'),
+      chalk.cyan('  rssm create --name AppState --schema ./schema.json'),
       '',
       '• Skip all prompts with complete options:',
-      chalk.cyan('  rsssm create -n MyState -s \'{}\' --no-persist --no-encrypt'),
+      chalk.cyan('  rssm create -n MyState -s \'{}\' --no-persist --no-encrypt'),
       '',
       '• Enable all features for maximum functionality:',
-      chalk.cyan('  rsssm create --persist --encrypt --logging --ttl 3600')
+      chalk.cyan('  rssm create --persist --encrypt --logging --ttl 3600')
     ].join('\n');
 
     console.log(boxen(tip, {
@@ -278,13 +278,13 @@ program
 // Placeholder for future update command
 program
   .command('update')
-  .description('Update an existing RSSSM state machine (coming soon)')
+  .description('Update an existing Rssm state machine (coming soon)')
   .action(() => {
     console.log(chalk.yellow('\n🚧 The update command is coming soon!\n'));
     console.log(chalk.gray('This will allow you to:'));
     console.log(chalk.gray('  • Update existing state machines with new schema fields'));
     console.log(chalk.gray('  • Change configuration options (persistence, encryption, etc.)'));
-    console.log(chalk.gray('  • Migrate from older versions of RSSSM\n'));
+    console.log(chalk.gray('  • Migrate from older versions of Rssm\n'));
   });
 
 program.parse();

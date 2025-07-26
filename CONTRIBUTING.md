@@ -1,10 +1,10 @@
-# Contributing to RSSSM
+# Contributing to RSSM
 
-First off, thank you for considering contributing to RSSSM! It's people like you that make RSSSM such a great tool.
+First off, thank you for considering contributing to Rssm! It's people like you that make Rssm such a great tool.
 
 ## Code of Conduct
 
-This project and everyone participating in it is governed by the [RSSSM Code of Conduct](CODE_OF_CONDUCT.md). By participating, you are expected to uphold this code.
+This project and everyone participating in it is governed by the [Rssm Code of Conduct](CODE_OF_CONDUCT.md). By participating, you are expected to uphold this code.
 
 ## How Can I Contribute?
 
@@ -84,7 +84,7 @@ bun run format
 ### Project Structure
 
 ```
-rsssm/
+rssm/
 ├── src/           # Core library source
 ├── cli/           # CLI tool source
 ├── site/          # Documentation website

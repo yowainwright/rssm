@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { z } from "zod";
-import { createRSSSM } from "../../../dist/index.mjs";
+import { createRssm } from "../../../dist/index.mjs";
 import { Button } from "./ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "./ui/card";
 import { Input } from "./ui/input";
@@ -19,8 +19,8 @@ const userSchema = z.object({
 
 type User = z.infer<typeof userSchema>;
 
-// Create RSSSM instance
-const { RSSMProvider, useRSSSM } = createRSSSM<User>("demoUser");
+// Create Rssm instance
+const { RssmProvider, useRssm } = createRssm<User>("demoUser");
 
 // Default user data
 const defaultUser: User = {
@@ -32,7 +32,7 @@ const defaultUser: User = {
 };
 
 function DemoContent() {
-  const { data, loading, error, actions } = useRSSSM();
+  const { data, loading, error, actions } = useRssm();
   const [formData, setFormData] = useState<Partial<User>>(defaultUser);
   const [updateData, setUpdateData] = useState<Partial<User>>({});
 
@@ -223,7 +223,7 @@ function DemoContent() {
           <CardHeader>
             <CardTitle>Current State</CardTitle>
             <CardDescription>
-              Real-time view of your RSSSM state
+              Real-time view of your Rssm state
             </CardDescription>
           </CardHeader>
           <CardContent>
@@ -292,13 +292,13 @@ function DemoContent() {
 
 export function InteractiveDemo() {
   return (
-    <RSSMProvider
+    <RssmProvider
       schema={userSchema}
       name="demoUser"
       persist={true}
       logging={true}
     >
       <DemoContent />
-    </RSSMProvider>
+    </RssmProvider>
   );
 }

@@ -7,11 +7,11 @@ const documentation = `
 ## Installation
 
 \`\`\`bash
-npm install rsssm zod react
+npm install rssm zod react
 # or
-yarn add rsssm zod react
+yarn add rssm zod react
 # or
-bun add rsssm zod react
+bun add rssm zod react
 \`\`\`
 
 ## Quick Start
@@ -20,7 +20,7 @@ bun add rsssm zod react
 
 \`\`\`typescript
 import { z } from 'zod';
-import { createRSSSM } from 'rsssm';
+import { createRssm } from 'rssm';
 
 const userSchema = z.object({
   id: z.string(),
@@ -35,7 +35,7 @@ type User = z.infer<typeof userSchema>;
 ### 2. Create your state machine
 
 \`\`\`typescript
-const { RSSMProvider, useRSSSM } = createRSSSM<User>('userState');
+const { RssmProvider, useRssm } = createRssm<User>('userState');
 \`\`\`
 
 ### 3. Wrap your app
@@ -43,9 +43,9 @@ const { RSSMProvider, useRSSSM } = createRSSSM<User>('userState');
 \`\`\`typescript
 function App() {
   return (
-    <RSSMProvider schema={userSchema} name="userState">
+    <RssmProvider schema={userSchema} name="userState">
       <YourComponent />
-    </RSSMProvider>
+    </RssmProvider>
   );
 }
 \`\`\`
@@ -54,7 +54,7 @@ function App() {
 
 \`\`\`typescript
 function UserProfile() {
-  const { data, loading, error, actions } = useRSSSM();
+  const { data, loading, error, actions } = useRssm();
 
   if (loading) return <div>Loading...</div>;
   if (error) return <div>Error: {error}</div>;
@@ -74,16 +74,16 @@ function UserProfile() {
 
 ## API Reference
 
-### \`createRSSSM<T>(name: string)\`
+### \`createRssm<T>(name: string)\`
 
-Creates a new RSSSM instance with TypeScript support.
+Creates a new Rssm instance with TypeScript support.
 
 **Parameters:**
 - \`name\`: Unique identifier for the state machine
 
 **Returns:**
-- \`RSSMProvider\`: React Provider component
-- \`useRSSSM\`: React Hook for accessing state
+- \`RssmProvider\`: React Provider component
+- \`useRssm\`: React Hook for accessing state
 
 ### Provider Props
 
@@ -100,7 +100,7 @@ Creates a new RSSSM instance with TypeScript support.
 
 ### Hook Return Value
 
-The \`useRSSSM\` hook returns:
+The \`useRssm\` hook returns:
 
 \`\`\`typescript
 {
@@ -126,13 +126,13 @@ The \`useRSSSM\` hook returns:
 Enable encryption for sensitive data:
 
 \`\`\`typescript
-<RSSMProvider
+<RssmProvider
   schema={schema}
   name="secure"
   encrypt={true}
 >
   {children}
-</RSSMProvider>
+</RssmProvider>
 \`\`\`
 
 ### ⏰ TTL (Time-to-Live)
@@ -140,13 +140,13 @@ Enable encryption for sensitive data:
 Auto-expire data after specified seconds:
 
 \`\`\`typescript
-<RSSMProvider
+<RssmProvider
   schema={schema}
   name="temporary"
   ttl={3600} // 1 hour
 >
   {children}
-</RSSMProvider>
+</RssmProvider>
 \`\`\`
 
 ### 📝 Logging
@@ -154,25 +154,25 @@ Auto-expire data after specified seconds:
 Enable debug logging:
 
 \`\`\`typescript
-<RSSMProvider
+<RssmProvider
   schema={schema}
   name="debug"
   logging={true}
 >
   {children}
-</RSSMProvider>
+</RssmProvider>
 \`\`\`
 
 ## CLI Tool
 
-RSSSM includes a powerful CLI for generating components:
+Rssm includes a powerful CLI for generating components:
 
 \`\`\`bash
 # Interactive mode
-npx rsssm create
+npx rssm create
 
 # With options
-npx rsssm create \\
+npx rssm create \\
   --name UserState \\
   --schema '{"name": "string", "email": "string"}' \\
   --persist \\
@@ -181,11 +181,11 @@ npx rsssm create \\
 
 ## TypeScript Support
 
-RSSSM is fully typed with TypeScript:
+Rssm is fully typed with TypeScript:
 
 \`\`\`typescript
 // Type is inferred from schema
-const { data } = useRSSSM();
+const { data } = useRssm();
 // data is typed as: User | null
 
 // Update accepts Partial<User>
@@ -212,7 +212,7 @@ export default function Home() {
       {/* Header */}
       <header className="border-b">
         <div className="container mx-auto px-4 py-6">
-          <h1 className="text-4xl font-bold">RSSSM</h1>
+          <h1 className="text-4xl font-bold">RSSM</h1>
           <p className="mt-2 text-xl text-muted-foreground">
             React Simple Schema State Machine - Type-safe state management with Zod validation
           </p>
@@ -224,7 +224,7 @@ export default function Home() {
         <div className="container mx-auto px-4 py-12">
           <h2 className="mb-8 text-3xl font-bold">Interactive Demo</h2>
           <p className="mb-8 text-muted-foreground">
-            Try out RSSSM with this interactive demo. Modify the form fields and click the CRUD buttons to see how the state changes in real-time.
+            Try out Rssm with this interactive demo. Modify the form fields and click the CRUD buttons to see how the state changes in real-time.
           </p>
           <InteractiveDemo />
         </div>
@@ -252,7 +252,7 @@ export default function Home() {
           </p>
           <div className="mt-4 flex justify-center gap-4">
             <a
-              href="https://github.com/yourusername/rsssm"
+              href="https://github.com/yowainwright/rssm"
               className="hover:underline"
               target="_blank"
               rel="noopener noreferrer"
@@ -260,7 +260,7 @@ export default function Home() {
               GitHub
             </a>
             <a
-              href="https://www.npmjs.com/package/rsssm"
+              href="https://www.npmjs.com/package/rssm"
               className="hover:underline"
               target="_blank"
               rel="noopener noreferrer"

@@ -3,16 +3,16 @@ import { storage } from "./storage";
 import type {
   Action,
   State,
-  RSSMProviderProps,
-  RSSMConfig,
-  RSSMContextValue,
-  RSSMHookReturn,
+  RssmProviderProps,
+  RssmConfig,
+  RssmContextValue,
+  RssmHookReturn,
 } from "./types";
 
 /**
- * Generic reducer for rsssm with localStorage support and schema validation
+ * Generic reducer for rssm with localStorage support and schema validation
  */
-function createReducer<T>(config: RSSMConfig<T>) {
+function createReducer<T>(config: RssmConfig<T>) {
   const log = config.logger || console;
   
   return (state: State<T>, action: Action<T>): State<T> => {
@@ -187,12 +187,12 @@ function createReducer<T>(config: RSSMConfig<T>) {
 }
 
 /**
- * Create a React Simple Schema State Machine (rsssm) with provider and hook
+ * Create a React Simple Schema State Machine (rssm) with provider and hook
  */
-export function createRSSSM<T>(name: string) {
-  const Context = createContext<RSSMContextValue<T> | undefined>(undefined);
+export function createRssm<T>(name: string) {
+  const Context = createContext<RssmContextValue<T> | undefined>(undefined);
 
-  function RSSMProvider({ 
+  function RssmProvider({ 
     children,
     schema,
     name,
@@ -202,8 +202,8 @@ export function createRSSSM<T>(name: string) {
     encrypt = false,
     logging = false,
     logger = console
-  }: RSSMProviderProps<T>) {
-    const config: RSSMConfig<T> = { name, schema, persist, ttl, encrypt, logging, logger };
+  }: RssmProviderProps<T>) {
+    const config: RssmConfig<T> = { name, schema, persist, ttl, encrypt, logging, logger };
     const reducer = createReducer<T>(config);
     
     // Load initial state from localStorage if persist is enabled
@@ -260,7 +260,7 @@ export function createRSSSM<T>(name: string) {
     );
   }
 
-  function useRSSSM(): RSSMHookReturn<T> {
+  function useRssm(): RssmHookReturn<T> {
     const context = useContext(Context);
     
     if (!context) {
@@ -284,15 +284,15 @@ export function createRSSSM<T>(name: string) {
   }
 
   return {
-    RSSMProvider,
-    useRSSSM,
+    RssmProvider,
+    useRssm,
   };
 }
 
 // Re-export types
 export type { 
-  RSSMProviderProps, 
-  RSSMHookReturn, 
+  RssmProviderProps, 
+  RssmHookReturn, 
   State, 
   Logger,
   RSSMActions 

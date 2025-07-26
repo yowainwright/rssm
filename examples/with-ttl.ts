@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import { createRSSSM } from 'rsssm';
+import { createRssm } from 'rssm';
 
 // Schema for session data
 const sessionSchema = z.object({
@@ -12,12 +12,12 @@ const sessionSchema = z.object({
 type Session = z.infer<typeof sessionSchema>;
 
 // Create state machine with TTL
-const { RSSMProvider, useRSSSM } = createRSSSM<Session>('session');
+const { RssmProvider, useRssm } = createRssm<Session>('session');
 
 // Usage with 1-hour TTL
 export function SessionProvider({ children }: { children: React.ReactNode }) {
   return (
-    <RSSMProvider
+    <RssmProvider
       schema={sessionSchema}
       name="session"
       persist={true}
@@ -25,9 +25,9 @@ export function SessionProvider({ children }: { children: React.ReactNode }) {
       encrypt={true} // Encrypt session data
     >
       {children}
-    </RSSMProvider>
+    </RssmProvider>
   );
 }
 
 // Hook to use in components
-export const useSession = useRSSSM;
+export const useSession = useRssm;

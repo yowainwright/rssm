@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import { createRSSSM } from 'rsssm';
+import { createRssm } from 'rssm';
 
 // Schema for sensitive user data
 const sensitiveDataSchema = z.object({
@@ -15,12 +15,12 @@ const sensitiveDataSchema = z.object({
 type SensitiveData = z.infer<typeof sensitiveDataSchema>;
 
 // Create encrypted state machine
-const { RSSMProvider, useRSSSM } = createRSSSM<SensitiveData>('sensitive');
+const { RssmProvider, useRssm } = createRssm<SensitiveData>('sensitive');
 
 // Usage with encryption enabled
 export function SecureDataProvider({ children }: { children: React.ReactNode }) {
   return (
-    <RSSMProvider
+    <RssmProvider
       schema={sensitiveDataSchema}
       name="sensitive"
       encrypt={true}  // Enable encryption
@@ -28,6 +28,6 @@ export function SecureDataProvider({ children }: { children: React.ReactNode }) 
       logging={false} // Disable logging for sensitive data
     >
       {children}
-    </RSSMProvider>
+    </RssmProvider>
   );
 }

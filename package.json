@@ -1,5 +1,5 @@
 {
-  "name": "rsssm",
+  "name": "rssm",
   "version": "1.0.0",
   "description": "React Simple Schema State Machine - Type-safe state management with Zod validation and CLI generator",
   "main": "./dist/index.js",
@@ -13,7 +13,7 @@
     }
   },
   "bin": {
-    "rsssm": "./cli/bin/rsssm.js"
+    "rssm": "./cli/bin/rssm.js"
   },
   "type": "module",
   "files": [
@@ -95,10 +95,10 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/yourusername/rsssm.git"
+    "url": "https://github.com/yowainwright/rssm.git"
   },
   "bugs": {
-    "url": "https://github.com/yourusername/rsssm/issues"
+    "url": "https://github.com/yowainwright/rssm/issues"
   },
-  "homepage": "https://github.com/yourusername/rsssm#readme"
+  "homepage": "https://github.com/yowainwright/rssm#readme"
 }

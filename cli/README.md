@@ -1,6 +1,6 @@
-# RSSSM CLI
+# RSSM CLI
 
-A beautiful command-line interface for generating React Simple Schema State Machine (RSSSM) components with type-safe state management.
+A beautiful command-line interface for generating React Simple Schema State Machine (Rssm) components with type-safe state management.
 
 ## Features
 
@@ -13,14 +13,14 @@ A beautiful command-line interface for generating React Simple Schema State Mach
 
 ## Installation
 
-The CLI is included with the `rsssm` package:
+The CLI is included with the `rssm` package:
 
 ```bash
-npm install rsssm
+npm install rssm
 # or
-yarn add rsssm
+yarn add rssm
 # or
-bun add rsssm
+bun add rssm
 ```
 
 ## Usage
@@ -30,7 +30,7 @@ bun add rsssm
 Run the CLI without options for an interactive experience:
 
 ```bash
-npx rsssm create
+npx rssm create
 ```
 
 You'll be prompted for:
@@ -46,7 +46,7 @@ You'll be prompted for:
 Skip prompts by providing options directly:
 
 ```bash
-npx rsssm create \
+npx rssm create \
   --name UserState \
   --schema '{"name": "string", "email": "string"}' \
   --persist \
@@ -74,7 +74,7 @@ npx rsssm create \
 See example usage patterns:
 
 ```bash
-npx rsssm example
+npx rssm example
 ```
 
 ## Code Generation
@@ -86,9 +86,9 @@ The CLI shows a preview of the generated component with proper syntax highlighti
 
 ```typescript
 import { z } from 'zod';
-import { createRSSSM } from 'rsssm';
+import { createRssm } from 'rssm';
 
-// Your schema defcreateion
+// Your schema definition
 const userStateSchema = z.object({
   name: z.string(),
   email: z.string(),
@@ -100,7 +100,7 @@ const userStateSchema = z.object({
 ### Generated Files
 
 1. **Component File** (`<name>.tsx`)
-   - Fully configured RSSSM provider
+   - Fully configured Rssm provider
    - Exported hooks for easy usage
    - TypeScript types included
 
@@ -114,7 +114,7 @@ const userStateSchema = z.object({
 ### Basic User Preferences
 
 ```bash
-npx rsssm create \
+npx rssm create \
   --name UserPreferences \
   --schema '{"theme": "string", "language": "string", "notifications": "boolean"}'
 ```
@@ -122,7 +122,7 @@ npx rsssm create \
 ### Todo List with TTL
 
 ```bash
-npx rsssm create \
+npx rssm create \
   --name TodoList \
   --schema '[{"id": "string", "text": "string", "completed": "boolean"}]' \
   --ttl 86400
@@ -131,7 +131,7 @@ npx rsssm create \
 ### Secure User Data
 
 ```bash
-npx rsssm create \
+npx rssm create \
   --name UserData \
   --schema '{"id": "string", "email": "string", "profile": {"name": "string", "avatar": "string"}}' \
   --encrypt \
@@ -141,7 +141,7 @@ npx rsssm create \
 ### Using a Schema File
 
 ```bash
-npx rsssm create \
+npx rssm create \
   --name AppState \
   --schema ./schemas/app-state.json
 ```
@@ -172,11 +172,11 @@ You can provide schemas as JSON files:
 
 ### ASCII Art Banner
 ```
- ____  ____ ____ ____  __  __ 
-|  _ \/ ___/ ___/ ___||  \/  |
-| |_) \___ \___ \___ \| |\/| |
-|  _ < ___) |__) |__) | |  | |
-|_| \_\____/____/____/|_|  |_|
+ ____  ____ ____ __  __ 
+|  _ \/ ___/ ___||  \/  |
+| |_) \___ \___ \| |\/| |
+|  _ < ___) |__) | |  | |
+|_| \_\____/____/|_|  |_|
 
 React Simple Schema State Machine CLI
 ```
@@ -203,13 +203,13 @@ React Simple Schema State Machine CLI
 ### Update (Coming Soon)
 
 ```bash
-npx rsssm update
+npx rssm update
 ```
 
 This will allow you to:
 - Update existing state machines with new schema fields
 - Change configuration options (persistence, encryption, etc.)
-- Migrate from older versions of RSSSM
+- Migrate from older versions of Rssm
 
 ## Development
 

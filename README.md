@@ -1,4 +1,4 @@
-# RSSSM - React Simple Schema State Machine
+# RSSM - React Simple Schema State Machine
 
 A lightweight, type-safe state management solution for React applications with built-in localStorage persistence, schema validation, logging capabilities, and a powerful CLI generator.
 
@@ -26,7 +26,7 @@ bun add rsssm
 
 ### Peer Dependencies
 
-RSSSM requires the following peer dependencies:
+Rssm requires the following peer dependencies:
 - `react` (>=16)
 - `react-dom` (>=16)
 - `zod` (>=3)
@@ -37,7 +37,7 @@ RSSSM requires the following peer dependencies:
 
 ```tsx
 import { z } from 'zod';
-import { createRSSSM } from 'rsssm';
+import { createRssm } from 'rssm';
 
 // Define your data schema
 const organizationSchema = z.object({
@@ -54,11 +54,11 @@ type Organization = z.infer<typeof organizationSchema>;
 ### 2. Create your state machine
 
 ```tsx
-// Create the rsssm
-const { RSSMProvider, useRSSSM } = createRSSSM<Organization>('OrgState');
+// Create the rssm
+const { RssmProvider, useRssm } = createRssm<Organization>('OrgState');
 
 // Export for use in other components
-export { RSSMProvider as OrgStateProvider, useRSSSM as useOrgState };
+export { RssmProvider as OrgStateProvider, useRssm as useOrgState };
 ```
 
 ### 3. Wrap your app with the provider
@@ -129,14 +129,14 @@ function OrganizationSelector() {
 
 ## Hook Return Value
 
-The `useRSSSM` hook returns an object with:
+The `useRssm` hook returns an object with:
 
 | Property | Type | Description |
 |----------|------|-------------|
 | `data` | `T \| null` | The current state data |
 | `loading` | `boolean` | Loading state indicator |
 | `error` | `string \| null` | Error message if any |
-| `actions` | `RSSMActions<T>` | Object containing all state actions |
+| `actions` | `RssmActions<T>` | Object containing all state actions |
 
 ### Actions
 
@@ -167,7 +167,7 @@ const userSchema = z.object({
 
 type User = z.infer<typeof userSchema>;
 
-const { RSSMProvider, useRSSSM } = createRSSSM<User>('UserState');
+const { RssmProvider, useRssm } = createRssm<User>('UserState');
 
 function App() {
   const initialUser: User = {
@@ -181,7 +181,7 @@ function App() {
   };
 
   return (
-    <RSSMProvider
+    <RssmProvider
       schema={userSchema}
       name="userState"
       initialData={initialUser}
@@ -190,7 +190,7 @@ function App() {
       encrypt={true} // Encrypt sensitive user data
     >
       <UserProfile />
-    </RSSMProvider>
+    </RssmProvider>
   );
 }
 ```
@@ -226,21 +226,21 @@ const customLogger = {
 ### Multiple State Machines
 
 ```tsx
-// Create multiple rsssm instances
+// Create multiple rssm instances
 const { 
-  RSSMProvider: OrgProvider, 
-  useRSSSM: useOrgState 
-} = createRSSSM<Organization>('OrgState');
+  RssmProvider: OrgProvider, 
+  useRssm: useOrgState 
+} = createRssm<Organization>('OrgState');
 
 const { 
-  RSSMProvider: SiteProvider, 
-  useRSSSM: useSiteState 
-} = createRSSSM<Site>('SiteState');
+  RssmProvider: SiteProvider, 
+  useRssm: useSiteState 
+} = createRssm<Site>('SiteState');
 
 const { 
-  RSSMProvider: UserProvider, 
-  useRSSSM: useUserState 
-} = createRSSSM<User>('UserState');
+  RssmProvider: UserProvider, 
+  useRssm: useUserState 
+} = createRssm<User>('UserState');
 
 // Combine providers
 function AppProviders({ children }: { children: ReactNode }) {
@@ -324,7 +324,7 @@ function useOrganizationManager() {
 
 ## Schema Validation
 
-RSSSM validates data against the provided Zod schema but **does not fail** if validation fails. Instead, it:
+Rssm validates data against the provided Zod schema but **does not fail** if validation fails. Instead, it:
 
 1. Logs a warning (if logging is enabled)
 2. Uses the unvalidated data
@@ -360,7 +360,7 @@ When `persist` is `true` (default):
 2. **Define schemas strictly**: Even though validation doesn't fail, strict schemas help catch issues
 3. **Handle errors appropriately**: Always check and handle the `error` state in your UI
 4. **Use loading states**: Show appropriate UI feedback during async operations
-5. **Combine with React Query**: For server state, combine RSSSM with React Query:
+5. **Combine with React Query**: For server state, combine Rssm with React Query:
 
 ```tsx
 function useOrganizationWithCache() {
@@ -370,7 +370,7 @@ function useOrganizationWithCache() {
     queryKey: ['organization', orgId],
     queryFn: fetchOrganization,
     onSuccess: (data) => {
-      actions.read(data); // Cache in RSSSM
+      actions.read(data); // Cache in Rssm
     },
   });
 }
@@ -378,7 +378,7 @@ function useOrganizationWithCache() {
 
 ## TypeScript Support
 
-RSSSM is fully typed and provides excellent TypeScript support:
+Rssm is fully typed and provides excellent TypeScript support:
 
 ```tsx
 // Type is inferred from schema
@@ -395,14 +395,14 @@ actions.create({ id: '1' }); // ❌ TypeScript error - missing required fields
 
 ## CLI Generator
 
-RSSSM includes a powerful CLI tool for generating state management components with beautiful terminal UI:
+Rssm includes a powerful CLI tool for generating state management components with beautiful terminal UI:
 
 ```bash
 # Interactive mode
-npx create-rsssm init
+npx create-rssm init
 
 # With options
-npx create-rsssm init \
+npx create-rssm init \
   --name UserState \
   --schema '{"name": "string", "age": "number"}' \
   --persist \
@@ -410,7 +410,7 @@ npx create-rsssm init \
   --ttl 3600
 
 # View examples
-npx create-rsssm example
+npx create-rssm example
 ```
 
 ### CLI Features
@@ -424,12 +424,12 @@ npx create-rsssm example
 
 ## Demo Application
 
-Explore RSSSM features with our demo application:
+Explore Rssm features with our demo application:
 
 ```bash
 # Clone the repository
-git clone https://github.com/yourusername/rsssm.git
-cd rsssm
+git clone https://github.com/yowainwright/rssm.git
+cd rssm
 
 # Install dependencies
 bun install
