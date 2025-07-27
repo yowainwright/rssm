@@ -1,0 +1,11 @@
+#!/bin/sh
+
+# Run lint-staged to process staged files
+bunx lint-staged
+
+# Run turbo build and test (full project check)
+echo "Running turbo build..."
+bunx turbo build
+
+echo "Running turbo test..."
+bunx turbo test

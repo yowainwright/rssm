@@ -2,9 +2,15 @@
 
 import { useState } from "react";
 import { z } from "zod";
-import { createRssm } from "../../../dist/index.mjs";
+import { createRssm } from "../../../dist/index.js";
 import { Button } from "./ui/button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "./ui/card";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "./ui/card";
 import { Input } from "./ui/input";
 import { Label } from "./ui/label";
 
@@ -51,14 +57,14 @@ function DemoContent() {
         age: formData.age || 0,
         active: formData.active !== undefined ? formData.active : true,
       };
-      
+
       // Validate with schema
       userSchema.parse(newUser);
       actions.create(newUser);
       setFormData({});
     } catch (err) {
       if (err instanceof z.ZodError) {
-        actions.setError(err.errors.map(e => e.message).join(", "));
+        actions.setError(err.errors.map((e) => e.message).join(", "));
       }
     }
   };
@@ -98,7 +104,9 @@ function DemoContent() {
               <Input
                 id="id"
                 value={formData.id || ""}
-                onChange={(e) => setFormData({ ...formData, id: e.target.value })}
+                onChange={(e) =>
+                  setFormData({ ...formData, id: e.target.value })
+                }
                 placeholder="Enter ID"
               />
             </div>
@@ -107,7 +115,9 @@ function DemoContent() {
               <Input
                 id="name"
                 value={formData.name || ""}
-                onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                onChange={(e) =>
+                  setFormData({ ...formData, name: e.target.value })
+                }
                 placeholder="Enter name"
               />
             </div>
@@ -117,7 +127,9 @@ function DemoContent() {
                 id="email"
                 type="email"
                 value={formData.email || ""}
-                onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                onChange={(e) =>
+                  setFormData({ ...formData, email: e.target.value })
+                }
                 placeholder="Enter email"
               />
             </div>
@@ -127,7 +139,12 @@ function DemoContent() {
                 id="age"
                 type="number"
                 value={formData.age || ""}
-                onChange={(e) => setFormData({ ...formData, age: parseInt(e.target.value) || 0 })}
+                onChange={(e) =>
+                  setFormData({
+                    ...formData,
+                    age: parseInt(e.target.value) || 0,
+                  })
+                }
                 placeholder="Enter age"
               />
             </div>
@@ -136,7 +153,9 @@ function DemoContent() {
                 type="checkbox"
                 id="active"
                 checked={formData.active || false}
-                onChange={(e) => setFormData({ ...formData, active: e.target.checked })}
+                onChange={(e) =>
+                  setFormData({ ...formData, active: e.target.checked })
+                }
                 className="rounded border-gray-300"
               />
               <Label htmlFor="active">Active</Label>
@@ -161,7 +180,9 @@ function DemoContent() {
               <Input
                 id="update-name"
                 value={updateData.name || ""}
-                onChange={(e) => setUpdateData({ ...updateData, name: e.target.value })}
+                onChange={(e) =>
+                  setUpdateData({ ...updateData, name: e.target.value })
+                }
                 placeholder="New name (optional)"
               />
             </div>
@@ -171,7 +192,9 @@ function DemoContent() {
                 id="update-email"
                 type="email"
                 value={updateData.email || ""}
-                onChange={(e) => setUpdateData({ ...updateData, email: e.target.value })}
+                onChange={(e) =>
+                  setUpdateData({ ...updateData, email: e.target.value })
+                }
                 placeholder="New email (optional)"
               />
             </div>
@@ -183,13 +206,16 @@ function DemoContent() {
                 value={updateData.age || ""}
                 onChange={(e) => {
                   const val = e.target.value;
-                  setUpdateData({ ...updateData, age: val ? parseInt(val) : undefined });
+                  setUpdateData({
+                    ...updateData,
+                    age: val ? parseInt(val) : undefined,
+                  });
                 }}
                 placeholder="New age (optional)"
               />
             </div>
-            <Button 
-              onClick={handleUpdate} 
+            <Button
+              onClick={handleUpdate}
               className="w-full"
               disabled={Object.keys(updateData).length === 0}
             >
@@ -202,9 +228,7 @@ function DemoContent() {
         <Card>
           <CardHeader>
             <CardTitle>Actions</CardTitle>
-            <CardDescription>
-              Other state management actions
-            </CardDescription>
+            <CardDescription>Other state management actions</CardDescription>
           </CardHeader>
           <CardContent className="grid gap-2">
             <Button onClick={handleReset} variant="outline">
@@ -222,16 +246,16 @@ function DemoContent() {
         <Card>
           <CardHeader>
             <CardTitle>Current State</CardTitle>
-            <CardDescription>
-              Real-time view of your Rssm state
-            </CardDescription>
+            <CardDescription>Real-time view of your Rssm state</CardDescription>
           </CardHeader>
           <CardContent>
             <div className="space-y-4">
               {/* Status Indicators */}
               <div className="flex gap-4 text-sm">
                 <div className="flex items-center gap-2">
-                  <div className={`h-2 w-2 rounded-full ${loading ? "bg-yellow-500" : "bg-green-500"}`} />
+                  <div
+                    className={`h-2 w-2 rounded-full ${loading ? "bg-yellow-500" : "bg-green-500"}`}
+                  />
                   <span>{loading ? "Loading" : "Ready"}</span>
                 </div>
                 {error && (
@@ -259,7 +283,10 @@ function DemoContent() {
               {/* LocalStorage Info */}
               <div className="text-sm text-muted-foreground">
                 <p>💾 Data is persisted to localStorage</p>
-                <p>🔑 Key: <code className="rounded bg-muted px-1">demoUser</code></p>
+                <p>
+                  🔑 Key:{" "}
+                  <code className="rounded bg-muted px-1">demoUser</code>
+                </p>
               </div>
             </div>
           </CardContent>
@@ -269,9 +296,7 @@ function DemoContent() {
         <Card>
           <CardHeader>
             <CardTitle>Schema Definition</CardTitle>
-            <CardDescription>
-              Zod schema used for validation
-            </CardDescription>
+            <CardDescription>Zod schema used for validation</CardDescription>
           </CardHeader>
           <CardContent>
             <pre className="rounded-md bg-muted p-4 text-sm overflow-x-auto">

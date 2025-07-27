@@ -1,0 +1,24 @@
+#!/bin/sh
+
+# post-merge hook
+# Runs after a successful merge
+
+echo "🔄 Post-merge: Checking for updates..."
+
+# Check if package.json or bun.lockb changed in the merge
+CHANGED_FILES=$(git diff-tree -r --name-only --no-commit-id ORIG_HEAD HEAD)
+
+if echo "$CHANGED_FILES" | grep -E "(package\.json|bun\.lockb)" > /dev/null; then
+  echo "📦 Dependencies changed in merge. Installing..."
+  bun install
+fi
+
+# Always rebuild after a merge to ensure everything is in sync
+echo "🔨 Rebuilding project..."
+bunx turbo build
+
+# Run tests to ensure merge didn't break anything
+echo "🧪 Running tests..."
+bunx turbo test
+
+echo "✅ Post-merge complete!"

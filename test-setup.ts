@@ -1,10 +1,7 @@
-// Setup file for bun tests
 import { GlobalWindow } from "happy-dom";
 
-// Create a global window instance
 const window = new GlobalWindow();
 
-// Register happy-dom globals
 Object.assign(global, {
   window,
   document: window.document,
@@ -19,5 +16,5 @@ Object.assign(global, {
   history: window.history,
   CustomEvent: window.CustomEvent,
   Event: window.Event,
-  EventTarget: window.EventTarget
+  EventTarget: window.EventTarget,
 });
