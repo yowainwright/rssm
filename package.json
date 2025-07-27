@@ -34,6 +34,7 @@
     "dev:site": "cd site && bun run dev",
     "test": "bun test",
     "test:watch": "bun test --watch",
+    "test:cli": "bun test cli/test",
     "format": "prettier --write \"src/**/*.{ts,tsx}\" \"cli/src/**/*.{ts,tsx}\" \"site/src/**/*.{ts,tsx}\"",
     "lint": "oxlint src cli/src site/src",
     "prepublishOnly": "bun run build",

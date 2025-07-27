@@ -145,3 +145,8 @@ bun-debug.log*
 # Vite logs files
 vite.config.js.timestamp-*
 vite.config.ts.timestamp-*
+demo-output
+.claude
+.vscode
+demo/demo-output
+demo/state

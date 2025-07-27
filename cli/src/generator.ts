@@ -1,9 +1,9 @@
-import fs from 'fs/promises';
-import path from 'path';
-import chalk from 'chalk';
-import ora from 'ora';
-import { highlight } from 'cli-highlight';
-import boxen from 'boxen';
+import fs from "fs/promises";
+import path from "path";
+import chalk from "chalk";
+import ora from "ora";
+import { highlight } from "cli-highlight";
+import boxen from "boxen";
 
 interface GeneratorOptions {
   name: string;
@@ -27,20 +27,20 @@ export async function generateComponent(options: GeneratorOptions) {
     encrypt,
     ttl,
     outputDir,
-    typescript
+    typescript,
   } = options;
 
   // Ensure output directory exists
-  const dirSpinner = ora('Creating output directory...').start();
+  const dirSpinner = ora("Creating output directory...").start();
   try {
     await fs.mkdir(outputDir, { recursive: true });
     dirSpinner.succeed();
   } catch (error) {
-    dirSpinner.fail('Failed to create directory');
+    dirSpinner.fail("Failed to create directory");
     throw error;
   }
 
-  const fileName = `${name.toLowerCase()}.${typescript ? 'tsx' : 'jsx'}`;
+  const fileName = `${name.toLowerCase()}.${typescript ? "tsx" : "jsx"}`;
   const filePath = path.join(outputDir, fileName);
 
   // Generate the component code
@@ -49,55 +49,69 @@ export async function generateComponent(options: GeneratorOptions) {
   // Write the component file
   const componentSpinner = ora(`Writing ${fileName}...`).start();
   try {
-    await fs.writeFile(filePath, code, 'utf-8');
+    await fs.writeFile(filePath, code, "utf-8");
     componentSpinner.succeed(chalk.green(`Component created: ${fileName}`));
   } catch (error) {
-    componentSpinner.fail('Failed to write component file');
+    componentSpinner.fail("Failed to write component file");
     throw error;
   }
 
   // Show component preview
-  console.log('\n' + chalk.blue('📄 Component Preview:'));
-  const highlightedCode = highlight(code.substring(0, 500) + '\n...', { language: 'typescript' });
-  console.log(boxen(highlightedCode, {
-    padding: 1,
-    borderStyle: 'single',
-    borderColor: 'gray',
-    dimBorder: true
-  }));
+  console.log("\n" + chalk.blue("📄 Component Preview:"));
+  const highlightedCode = highlight(code.substring(0, 500) + "\n...", {
+    language: "typescript",
+  });
+  console.log(
+    boxen(highlightedCode, {
+      padding: 1,
+      borderStyle: "single",
+      borderColor: "gray",
+      dimBorder: true,
+    }),
+  );
 
   // Generate example usage file
   const exampleCode = generateExampleCode(options);
-  const examplePath = path.join(outputDir, `${name.toLowerCase()}.example.${typescript ? 'tsx' : 'jsx'}`);
-  
+  const examplePath = path.join(
+    outputDir,
+    `${name.toLowerCase()}.example.${typescript ? "tsx" : "jsx"}`,
+  );
+
   const exampleSpinner = ora(`Writing example file...`).start();
   try {
-    await fs.writeFile(examplePath, exampleCode, 'utf-8');
-    exampleSpinner.succeed(chalk.green(`Example created: ${name.toLowerCase()}.example.${typescript ? 'tsx' : 'jsx'}`));
+    await fs.writeFile(examplePath, exampleCode, "utf-8");
+    exampleSpinner.succeed(
+      chalk.green(
+        `Example created: ${name.toLowerCase()}.example.${typescript ? "tsx" : "jsx"}`,
+      ),
+    );
   } catch (error) {
-    exampleSpinner.fail('Failed to write example file');
+    exampleSpinner.fail("Failed to write example file");
     throw error;
   }
 
   // Summary box
   const summary = [
-    chalk.green.bold('✨ Files Generated Successfully!'),
-    '',
-    chalk.white('Component:') + ' ' + chalk.cyan(filePath),
-    chalk.white('Example:') + ' ' + chalk.cyan(examplePath),
-    '',
-    chalk.gray('Features enabled:'),
-    `  ${persist ? '✓' : '✗'} Persistence`,
-    `  ${logging ? '✓' : '✗'} Logging`,
-    `  ${encrypt ? '✓' : '✗'} Encryption`,
-    ttl ? `  ✓ TTL: ${ttl}s` : '  ✗ TTL'
-  ].join('\n');
+    chalk.green.bold("✨ Files Generated Successfully!"),
+    "",
+    chalk.white("Component:") + " " + chalk.cyan(filePath),
+    chalk.white("Example:") + " " + chalk.cyan(examplePath),
+    "",
+    chalk.gray("Features enabled:"),
+    `  ${persist ? "✓" : "✗"} Persistence`,
+    `  ${logging ? "✓" : "✗"} Logging`,
+    `  ${encrypt ? "✓" : "✗"} Encryption`,
+    ttl ? `  ✓ TTL: ${ttl}s` : "  ✗ TTL",
+  ].join("\n");
 
-  console.log('\n' + boxen(summary, {
-    padding: 1,
-    borderStyle: 'double',
-    borderColor: 'green'
-  }));
+  console.log(
+    "\n" +
+      boxen(summary, {
+        padding: 1,
+        borderStyle: "double",
+        borderColor: "green",
+      }),
+  );
 }
 
 function generateCode(options: GeneratorOptions): string {
@@ -109,29 +123,31 @@ function generateCode(options: GeneratorOptions): string {
     logging,
     encrypt,
     ttl,
-    typescript
+    typescript,
   } = options;
 
   const providerProps = [
-    'schema={' + `${typeName.toLowerCase()}Schema` + '}',
+    "schema={" + `${typeName.toLowerCase()}Schema` + "}",
     `name="${name.toLowerCase()}"`,
-    persist !== true && `persist={${persist}}`,
+    persist === false && `persist={${persist}}`,
     logging && `logging={${logging}}`,
     encrypt && `encrypt={${encrypt}}`,
     ttl && `ttl={${ttl}}`,
-  ].filter(Boolean).join('\n      ');
+  ]
+    .filter(Boolean)
+    .join("\n      ");
 
-  return `${typescript ? "import { z } from 'zod';" : ''}
+  return `${typescript ? "import { z } from 'zod';" : ""}
 import { createRssm } from 'rssm';
 
 // Define your schema
 ${zodSchema}
 
 // Create the state machine
-const { RssmProvider, useRssm } = createRssm${typescript ? `<${typeName}>` : ''}('${name}');
+const { RssmProvider, useRssm } = createRssm${typescript ? `<${typeName}>` : ""}('${name}');
 
 // Export the provider with preset configuration
-export function ${name}Provider({ children }${typescript ? ': { children: React.ReactNode }' : ''}) {
+export function ${name}Provider({ children }${typescript ? ": { children: React.ReactNode }" : ""}) {
   return (
     <RssmProvider
       ${providerProps}
@@ -144,15 +160,19 @@ export function ${name}Provider({ children }${typescript ? ': { children: React.
 // Export the hook for convenience
 export const use${name} = useRssm;
 
-// Export types${typescript ? `
-export type { ${typeName} };` : ''}
+// Export types${
+    typescript
+      ? `
+export type { ${typeName} };`
+      : ""
+  }
 `;
 }
 
 function generateExampleCode(options: GeneratorOptions): string {
   const { name, typeName, typescript } = options;
 
-  return `${typescript ? "import React from 'react';" : ''}
+  return `${typescript ? "import React from 'react';" : ""}
 import { ${name}Provider, use${name} } from './${name.toLowerCase()}';
 
 function ${name}Demo() {
