@@ -47,8 +47,8 @@
         "zod": "^3.23.0",
       },
       "peerDependencies": {
-        "react": "^19.1.0",
-        "react-dom": "^19.1.0",
+        "react": ">=16",
+        "react-dom": ">=16",
         "zod": ">=3",
       },
     },
