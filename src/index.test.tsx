@@ -4,20 +4,18 @@ import { describe, test, expect, beforeEach, mock, spyOn } from "bun:test";
 import { z } from "zod";
 import { createRssm } from "./index";
 
-// Mock localstorage-slim
 const mockStorage = {
   get: mock(() => null),
   set: mock(() => {}),
   remove: mock(() => {}),
   clear: mock(() => {}),
-  flush: mock(() => true)
+  flush: mock(() => true),
 };
 
 mock.module("localstorage-slim", () => ({
-  default: mockStorage
+  default: mockStorage,
 }));
 
-// Test schema
 const testSchema = z.object({
   id: z.string(),
   name: z.string(),
@@ -34,7 +32,6 @@ describe("Rssm", () => {
   };
 
   beforeEach(() => {
-    // Reset all mocks
     mockStorage.get.mockReset();
     mockStorage.set.mockReset();
     mockStorage.remove.mockReset();
@@ -49,7 +46,7 @@ describe("Rssm", () => {
   describe("createRssm", () => {
     test("should create a state machine with provider and hook", () => {
       const { RssmProvider, useRssm } = createRssm<TestData>("TestMachine");
-      
+
       expect(RssmProvider).toBeDefined();
       expect(useRssm).toBeDefined();
     });
@@ -58,7 +55,7 @@ describe("Rssm", () => {
   describe("RssmProvider", () => {
     test("should provide initial state with null data", () => {
       const { RssmProvider, useRssm } = createRssm<TestData>("TestMachine");
-      
+
       const wrapper = ({ children }: { children: React.ReactNode }) => (
         <RssmProvider schema={testSchema} name="test">
           {children}
@@ -75,7 +72,7 @@ describe("Rssm", () => {
     test("should provide initial state with initial data", () => {
       const { RssmProvider, useRssm } = createRssm<TestData>("TestMachine");
       const initialData: TestData = { id: "1", name: "Test", count: 0 };
-      
+
       const wrapper = ({ children }: { children: React.ReactNode }) => (
         <RssmProvider schema={testSchema} name="test" initialData={initialData}>
           {children}
@@ -96,7 +93,7 @@ describe("Rssm", () => {
       mockStorage.get.mockReturnValue(storedState);
 
       const { RssmProvider, useRssm } = createRssm<TestData>("TestMachine");
-      
+
       const wrapper = ({ children }: { children: React.ReactNode }) => (
         <RssmProvider schema={testSchema} name="test">
           {children}
@@ -111,7 +108,7 @@ describe("Rssm", () => {
 
     test("should not load from localStorage when persist is false", () => {
       const { RssmProvider, useRssm } = createRssm<TestData>("TestMachine");
-      
+
       const wrapper = ({ children }: { children: React.ReactNode }) => (
         <RssmProvider schema={testSchema} name="test" persist={false}>
           {children}
@@ -125,12 +122,16 @@ describe("Rssm", () => {
 
     test("should validate initial data and warn if invalid", () => {
       const { RssmProvider, useRssm } = createRssm<TestData>("TestMachine");
-      const invalidData = { id: "1", name: "Test", count: "not a number" as unknown as number };
-      
+      const invalidData = {
+        id: "1",
+        name: "Test",
+        count: "not a number" as unknown as number,
+      };
+
       const wrapper = ({ children }: { children: React.ReactNode }) => (
-        <RssmProvider 
-          schema={testSchema} 
-          name="test" 
+        <RssmProvider
+          schema={testSchema}
+          name="test"
           initialData={invalidData}
           logging={true}
           logger={mockLogger}
@@ -144,7 +145,7 @@ describe("Rssm", () => {
 
       expect(mockLogger.warn).toHaveBeenCalledWith(
         expect.stringContaining("[test] Initial data failed schema validation"),
-        expect.any(Error)
+        expect.any(Error),
       );
       // Should still use the invalid data
       expect(result.current.data).toEqual(invalidData);
@@ -154,7 +155,7 @@ describe("Rssm", () => {
   describe("State Actions", () => {
     test("should handle CREATE action", () => {
       const { RssmProvider, useRssm } = createRssm<TestData>("TestMachine");
-      
+
       const wrapper = ({ children }: { children: React.ReactNode }) => (
         <RssmProvider schema={testSchema} name="test" persist={false}>
           {children}
@@ -175,7 +176,7 @@ describe("Rssm", () => {
 
     test("should handle READ action", () => {
       const { RssmProvider, useRssm } = createRssm<TestData>("TestMachine");
-      
+
       const wrapper = ({ children }: { children: React.ReactNode }) => (
         <RssmProvider schema={testSchema} name="test" persist={false}>
           {children}
@@ -195,9 +196,14 @@ describe("Rssm", () => {
     test("should handle UPDATE action", () => {
       const { RssmProvider, useRssm } = createRssm<TestData>("TestMachine");
       const initialData: TestData = { id: "1", name: "Initial", count: 1 };
-      
+
       const wrapper = ({ children }: { children: React.ReactNode }) => (
-        <RssmProvider schema={testSchema} name="test" initialData={initialData} persist={false}>
+        <RssmProvider
+          schema={testSchema}
+          name="test"
+          initialData={initialData}
+          persist={false}
+        >
           {children}
         </RssmProvider>
       );
@@ -208,15 +214,24 @@ describe("Rssm", () => {
         result.current.actions.update({ name: "Updated", count: 2 });
       });
 
-      expect(result.current.data).toEqual({ id: "1", name: "Updated", count: 2 });
+      expect(result.current.data).toEqual({
+        id: "1",
+        name: "Updated",
+        count: 2,
+      });
     });
 
     test("should handle DESTROY action", () => {
       const { RssmProvider, useRssm } = createRssm<TestData>("TestMachine");
       const initialData: TestData = { id: "1", name: "ToDestroy", count: 1 };
-      
+
       const wrapper = ({ children }: { children: React.ReactNode }) => (
-        <RssmProvider schema={testSchema} name="test" initialData={initialData} persist={false}>
+        <RssmProvider
+          schema={testSchema}
+          name="test"
+          initialData={initialData}
+          persist={false}
+        >
           {children}
         </RssmProvider>
       );
@@ -232,7 +247,7 @@ describe("Rssm", () => {
 
     test("should handle SET_LOADING action", () => {
       const { RssmProvider, useRssm } = createRssm<TestData>("TestMachine");
-      
+
       const wrapper = ({ children }: { children: React.ReactNode }) => (
         <RssmProvider schema={testSchema} name="test" persist={false}>
           {children}
@@ -256,7 +271,7 @@ describe("Rssm", () => {
 
     test("should handle SET_ERROR action", () => {
       const { RssmProvider, useRssm } = createRssm<TestData>("TestMachine");
-      
+
       const wrapper = ({ children }: { children: React.ReactNode }) => (
         <RssmProvider schema={testSchema} name="test" persist={false}>
           {children}
@@ -276,9 +291,14 @@ describe("Rssm", () => {
     test("should handle RESET action", () => {
       const { RssmProvider, useRssm } = createRssm<TestData>("TestMachine");
       const initialData: TestData = { id: "1", name: "ToReset", count: 1 };
-      
+
       const wrapper = ({ children }: { children: React.ReactNode }) => (
-        <RssmProvider schema={testSchema} name="test" initialData={initialData} persist={false}>
+        <RssmProvider
+          schema={testSchema}
+          name="test"
+          initialData={initialData}
+          persist={false}
+        >
           {children}
         </RssmProvider>
       );
@@ -298,7 +318,7 @@ describe("Rssm", () => {
   describe("Persistence", () => {
     test("should persist state changes to localStorage", () => {
       const { RssmProvider, useRssm } = createRssm<TestData>("TestMachine");
-      
+
       const wrapper = ({ children }: { children: React.ReactNode }) => (
         <RssmProvider schema={testSchema} name="test">
           {children}
@@ -315,13 +335,13 @@ describe("Rssm", () => {
       expect(mockStorage.set).toHaveBeenCalledWith(
         "test",
         { data: newData, loading: false, error: null },
-        { ttl: 0, encrypt: false }
+        { ttl: 0, encrypt: false },
       );
     });
 
     test("should remove from localStorage on destroy", () => {
       const { RssmProvider, useRssm } = createRssm<TestData>("TestMachine");
-      
+
       const wrapper = ({ children }: { children: React.ReactNode }) => (
         <RssmProvider schema={testSchema} name="test">
           {children}
@@ -339,7 +359,7 @@ describe("Rssm", () => {
 
     test("should support TTL option", () => {
       const { RssmProvider, useRssm } = createRssm<TestData>("TestMachine");
-      
+
       const wrapper = ({ children }: { children: React.ReactNode }) => (
         <RssmProvider schema={testSchema} name="test" ttl={3600}>
           {children}
@@ -353,16 +373,15 @@ describe("Rssm", () => {
         result.current.actions.create(newData);
       });
 
-      expect(mockStorage.set).toHaveBeenCalledWith(
-        "test",
-        expect.any(Object),
-        { ttl: 3600, encrypt: false }
-      );
+      expect(mockStorage.set).toHaveBeenCalledWith("test", expect.any(Object), {
+        ttl: 3600,
+        encrypt: false,
+      });
     });
 
     test("should support encryption option", () => {
       const { RssmProvider, useRssm } = createRssm<TestData>("TestMachine");
-      
+
       const wrapper = ({ children }: { children: React.ReactNode }) => (
         <RssmProvider schema={testSchema} name="test" encrypt={true}>
           {children}
@@ -376,22 +395,21 @@ describe("Rssm", () => {
         result.current.actions.create(newData);
       });
 
-      expect(mockStorage.set).toHaveBeenCalledWith(
-        "test",
-        expect.any(Object),
-        { ttl: 0, encrypt: true }
-      );
+      expect(mockStorage.set).toHaveBeenCalledWith("test", expect.any(Object), {
+        ttl: 0,
+        encrypt: true,
+      });
     });
   });
 
   describe("Schema Validation", () => {
     test("should validate data on CREATE and warn if invalid", () => {
       const { RssmProvider, useRssm } = createRssm<TestData>("TestMachine");
-      
+
       const wrapper = ({ children }: { children: React.ReactNode }) => (
-        <RssmProvider 
-          schema={testSchema} 
-          name="test" 
+        <RssmProvider
+          schema={testSchema}
+          name="test"
           logging={true}
           logger={mockLogger}
           persist={false}
@@ -401,7 +419,11 @@ describe("Rssm", () => {
       );
 
       const { result } = renderHook(() => useRssm(), { wrapper });
-      const invalidData = { id: "1", name: "Invalid", count: "not a number" as unknown as number };
+      const invalidData = {
+        id: "1",
+        name: "Invalid",
+        count: "not a number" as unknown as number,
+      };
 
       act(() => {
         result.current.actions.create(invalidData);
@@ -409,7 +431,7 @@ describe("Rssm", () => {
 
       expect(mockLogger.warn).toHaveBeenCalledWith(
         expect.stringContaining("[test] Schema validation failed"),
-        expect.any(Error)
+        expect.any(Error),
       );
       // Should still set the invalid data
       expect(result.current.data).toEqual(invalidData);
@@ -418,11 +440,11 @@ describe("Rssm", () => {
     test("should validate data on UPDATE and warn if invalid", () => {
       const { RssmProvider, useRssm } = createRssm<TestData>("TestMachine");
       const initialData: TestData = { id: "1", name: "Valid", count: 1 };
-      
+
       const wrapper = ({ children }: { children: React.ReactNode }) => (
-        <RssmProvider 
-          schema={testSchema} 
-          name="test" 
+        <RssmProvider
+          schema={testSchema}
+          name="test"
           initialData={initialData}
           logging={true}
           logger={mockLogger}
@@ -435,26 +457,32 @@ describe("Rssm", () => {
       const { result } = renderHook(() => useRssm(), { wrapper });
 
       act(() => {
-        result.current.actions.update({ count: "invalid" as unknown as number });
+        result.current.actions.update({
+          count: "invalid" as unknown as number,
+        });
       });
 
       expect(mockLogger.warn).toHaveBeenCalledWith(
         expect.stringContaining("[test] Schema validation failed on update"),
-        expect.any(Error)
+        expect.any(Error),
       );
       // Should still update with invalid data
-      expect(result.current.data).toEqual({ id: "1", name: "Valid", count: "invalid" });
+      expect(result.current.data).toEqual({
+        id: "1",
+        name: "Valid",
+        count: "invalid",
+      });
     });
   });
 
   describe("Logging", () => {
     test("should log actions when logging is enabled", () => {
       const { RssmProvider, useRssm } = createRssm<TestData>("TestMachine");
-      
+
       const wrapper = ({ children }: { children: React.ReactNode }) => (
-        <RssmProvider 
-          schema={testSchema} 
-          name="test" 
+        <RssmProvider
+          schema={testSchema}
+          name="test"
           logging={true}
           logger={mockLogger}
           persist={false}
@@ -472,16 +500,16 @@ describe("Rssm", () => {
 
       expect(mockLogger.info).toHaveBeenCalledWith(
         "[test] Action: CREATE",
-        newData
+        newData,
       );
     });
 
     test("should not log when logging is disabled (default)", () => {
       const { RssmProvider, useRssm } = createRssm<TestData>("TestMachine");
-      
+
       const wrapper = ({ children }: { children: React.ReactNode }) => (
-        <RssmProvider 
-          schema={testSchema} 
+        <RssmProvider
+          schema={testSchema}
           name="test"
           logger={mockLogger}
           persist={false}
@@ -503,13 +531,13 @@ describe("Rssm", () => {
   describe("Error Handling", () => {
     test("should throw error when hook is used outside provider", () => {
       const { useRssm } = createRssm<TestData>("TestMachine");
-      
+
       const consoleError = spyOn(console, "error").mockImplementation(() => {});
-      
+
       expect(() => {
         renderHook(() => useRssm());
       }).toThrow("TestMachine must be used within TestMachineProvider");
-      
+
       consoleError.mockRestore();
     });
   });

@@ -1,4 +1,4 @@
-# RSSM CLI
+# rssm CLI
 
 A beautiful command-line interface for generating React Simple Schema State Machine (Rssm) components with type-safe state management.
 
@@ -34,6 +34,7 @@ npx rssm create
 ```
 
 You'll be prompted for:
+
 - Component name
 - JSON schema (inline or file path)
 - Persistence settings
@@ -58,16 +59,16 @@ npx rssm create \
 
 #### Available Options
 
-| Option | Alias | Description | Default |
-|--------|-------|-------------|---------|
-| `--name <name>` | `-n` | State machine name | Interactive prompt |
-| `--schema <schema>` | `-s` | JSON schema or file path | Interactive prompt |
-| `--typescript` | `-t` | Generate TypeScript | `true` |
-| `--persist` | `-p` | Enable localStorage | `true` |
-| `--logging` | `-l` | Enable logging | `false` |
-| `--encrypt` | `-e` | Enable encryption | `false` |
-| `--ttl <seconds>` | | Time-to-live in seconds | None |
-| `--output <path>` | `-o` | Output directory | `./src/state` |
+| Option              | Alias | Description              | Default            |
+| ------------------- | ----- | ------------------------ | ------------------ |
+| `--name <name>`     | `-n`  | State machine name       | Interactive prompt |
+| `--schema <schema>` | `-s`  | JSON schema or file path | Interactive prompt |
+| `--typescript`      | `-t`  | Generate TypeScript      | `true`             |
+| `--persist`         | `-p`  | Enable localStorage      | `true`             |
+| `--logging`         | `-l`  | Enable logging           | `false`            |
+| `--encrypt`         | `-e`  | Enable encryption        | `false`            |
+| `--ttl <seconds>`   |       | Time-to-live in seconds  | None               |
+| `--output <path>`   | `-o`  | Output directory         | `./src/state`      |
 
 ### View Examples
 
@@ -82,11 +83,12 @@ npx rssm example
 The CLI generates beautiful, syntax-highlighted code snippets in your terminal:
 
 ### Component Preview
+
 The CLI shows a preview of the generated component with proper syntax highlighting:
 
 ```typescript
-import { z } from 'zod';
-import { createRssm } from 'rssm';
+import { z } from "zod";
+import { createRssm } from "rssm";
 
 // Your schema definition
 const userStateSchema = z.object({
@@ -171,8 +173,9 @@ You can provide schemas as JSON files:
 ## Visual Features
 
 ### ASCII Art Banner
+
 ```
- ____  ____ ____ __  __ 
+ ____  ____ ____ __  __
 |  _ \/ ___/ ___||  \/  |
 | |_) \___ \___ \| |\/| |
 |  _ < ___) |__) | |  | |
@@ -182,11 +185,13 @@ React Simple Schema State Machine CLI
 ```
 
 ### Progress Indicators
+
 - ✨ Ora spinners for async operations
 - ✅ Success messages with green checkmarks
 - ❌ Clear error messages with helpful hints
 
 ### Boxed Output
+
 - Configuration summaries in bordered boxes
 - Code snippets with syntax highlighting
 - Success messages with decorative borders
@@ -207,6 +212,7 @@ npx rssm update
 ```
 
 This will allow you to:
+
 - Update existing state machines with new schema fields
 - Change configuration options (persistence, encryption, etc.)
 - Migrate from older versions of Rssm
@@ -214,6 +220,7 @@ This will allow you to:
 ## Development
 
 The CLI is built with:
+
 - [Commander.js](https://github.com/tj/commander.js/) - Command-line interface
 - [Inquirer.js](https://github.com/SBoudrias/Inquirer.js/) - Interactive prompts
 - [Chalk](https://github.com/chalk/chalk) - Terminal colors

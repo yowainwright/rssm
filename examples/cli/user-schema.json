@@ -1,0 +1,25 @@
+{
+  "id": "string",
+  "username": "string",
+  "email": "string",
+  "profile": {
+    "firstName": "string",
+    "lastName": "string",
+    "avatar": "string",
+    "bio": "string"
+  },
+  "settings": {
+    "theme": "string",
+    "language": "string",
+    "notifications": {
+      "email": "boolean",
+      "push": "boolean",
+      "sms": "boolean"
+    }
+  },
+  "metadata": {
+    "createdAt": "date",
+    "updatedAt": "date",
+    "lastLogin": "date"
+  }
+}

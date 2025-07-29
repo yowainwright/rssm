@@ -1,9 +1,13 @@
 import { z } from "zod";
 
-/**
- * Standard action types for state machine
- */
-export type ActionType = "CREATE" | "READ" | "UPDATE" | "DESTROY" | "SET_LOADING" | "SET_ERROR" | "RESET";
+export type ActionType =
+  | "CREATE"
+  | "READ"
+  | "UPDATE"
+  | "DESTROY"
+  | "SET_LOADING"
+  | "SET_ERROR"
+  | "RESET";
 
 export interface Action<T> {
   type: ActionType;

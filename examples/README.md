@@ -1,25 +1,27 @@
-# RSSM Examples
+# rssm Examples
 
-This directory contains example code showing different use cases for Rssm.
+This directory contains various examples demonstrating different aspects of rssm.
 
-## Examples
+## Structure
 
-- **basic-usage.ts** - Simple user state management
-- **with-encryption.ts** - Storing sensitive data with encryption
-- **with-ttl.ts** - Session management with auto-expiration
+### `/cli`
 
-## Running Examples
+Command-line interface examples and demonstrations:
 
-These are TypeScript files meant to be copied into your project. To use them:
+- Docker-based CLI demos
+- Shell scripts showing CLI usage
+- Example schemas and generated outputs
 
-1. Copy the example file to your project
-2. Update the import path for `rssm`
-3. Integrate with your React components
+### `/typescript`
 
-## Creating Your Own
+TypeScript code examples for library usage:
 
-Use the CLI to generate customized Rssm components:
+- Basic state management patterns
+- Encryption functionality
+- TTL (Time-to-Live) features
+- Ready-to-use code snippets
 
-```bash
-npx rssm create
-```
+## Getting Started
+
+- For CLI examples, see the [CLI README](./cli/README.md)
+- For TypeScript examples, see the [TypeScript README](./typescript/README.md)

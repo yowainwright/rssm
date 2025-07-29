@@ -1,7 +1,7 @@
-import React, { createContext, useContext, useReducer, useEffect } from "react";
+import { createContext, useContext, useReducer, useEffect } from "react";
 import { useDebouncedCallback } from "use-debounce";
 import isEqual from "react-fast-compare";
-import storage from 'localstorage-slim';
+import storage from "localstorage-slim";
 import type {
   Action,
   State,
@@ -11,92 +11,95 @@ import type {
   RssmHookReturn,
 } from "./types";
 
-/**
- * Generic reducer for rssm with localStorage support and schema validation
- */
 function createReducer<T>(
   config: RssmConfig<T>,
-  debouncedPersist: (state: State<T>) => void
+  debouncedPersist: (state: State<T>) => void,
 ) {
   const log = config.logger || console;
-  
+
   return (state: State<T>, action: Action<T>): State<T> => {
     if (config.logging) {
       log.info(`[${config.name}] Action: ${action.type}`, action.payload);
     }
-    
+
     switch (action.type) {
       case "CREATE":
       case "READ": {
         let data = action.payload as T;
-        
-        // Try to validate data against schema
+
         try {
           data = config.schema.parse(action.payload);
         } catch (error) {
           if (config.logging) {
-            log.warn(`[${config.name}] Schema validation failed, using unvalidated data:`, error);
+            log.warn(
+              `[${config.name}] Schema validation failed, using unvalidated data:`,
+              error,
+            );
           }
         }
-        
+
         const newState = {
           data,
           loading: false,
           error: null,
         };
-        
-        // For CREATE/READ, persist immediately (no debounce)
+
         if (config.persist) {
           try {
-            storage.set(config.name, newState, { ttl: config.ttl || 0, encrypt: config.encrypt });
+            storage.set(config.name, newState, {
+              ttl: config.ttl || 0,
+              encrypt: config.encrypt,
+            });
             if (config.logging) {
               log.info(`[${config.name}] Persisted to localStorage`);
             }
           } catch (error) {
             if (config.logging) {
-              log.error(`[${config.name}] Failed to persist to localStorage:`, error);
+              log.error(
+                `[${config.name}] Failed to persist to localStorage:`,
+                error,
+              );
             }
           }
         }
-        
+
         return newState;
       }
 
       case "UPDATE": {
-        // Check if we actually need to update
         const currentData = state.data;
-        let newData = currentData 
+        let newData = currentData
           ? { ...currentData, ...(action.payload as Partial<T>) }
           : (action.payload as T);
-        
-        // Use fast compare to check if data actually changed
+
         if (currentData && isEqual(currentData, newData)) {
           if (config.logging) {
             log.info(`[${config.name}] No changes detected, skipping update`);
           }
           return state;
         }
-        
-        // Try to validate updated data against schema
+
         try {
           newData = config.schema.parse(newData);
         } catch (error) {
           if (config.logging) {
-            log.warn(`[${config.name}] Schema validation failed on update, using unvalidated data:`, error);
+            log.warn(
+              `[${config.name}] Schema validation failed on update, using unvalidated data:`,
+              error,
+            );
           }
         }
-        
+
         const newState = {
           ...state,
           data: newData,
           error: null,
         };
-        
-        // Use debounced persist for updates
+
         if (config.persist) {
           debouncedPersist(newState);
         }
-        
+
         return newState;
       }
 
@@ -106,7 +109,7 @@ function createReducer<T>(
           loading: false,
           error: null,
         };
-        
+
         if (config.persist) {
           try {
             storage.remove(config.name);
@@ -115,53 +118,55 @@ function createReducer<T>(
             }
           } catch (error) {
             if (config.logging) {
-              log.error(`[${config.name}] Failed to remove from localStorage:`, error);
+              log.error(
+                `[${config.name}] Failed to remove from localStorage:`,
+                error,
+              );
             }
           }
         }
-        
+
         return newState;
       }
 
       case "SET_LOADING": {
-        // Only update if loading state actually changed
         if (state.loading === (action.payload as boolean)) {
           return state;
         }
-        
+
         const newState = {
           ...state,
           loading: action.payload as boolean,
         };
-        
-        // Use debounced persist for loading state changes
+
         if (config.persist) {
           debouncedPersist(newState);
         }
-        
+
         return newState;
       }
 
       case "SET_ERROR": {
-        // Only update if error actually changed
         if (state.error === (action.payload as string | null)) {
           return state;
         }
-        
+
         const newState = {
           ...state,
           error: action.payload as string | null,
           loading: false,
         };
-        
-        // Use debounced persist for error state changes
+
         if (config.persist) {
           debouncedPersist(newState);
           if (config.logging && action.payload) {
-            log.warn(`[${config.name}] Error state will be persisted:`, action.payload);
+            log.warn(
+              `[${config.name}] Error state will be persisted:`,
+              action.payload,
+            );
           }
         }
-        
+
         return newState;
       }
 
@@ -171,7 +176,7 @@ function createReducer<T>(
           loading: false,
           error: null,
         };
-        
+
         if (config.persist) {
           try {
             storage.remove(config.name);
@@ -180,11 +185,14 @@ function createReducer<T>(
             }
           } catch (error) {
             if (config.logging) {
-              log.error(`[${config.name}] Failed to reset localStorage:`, error);
+              log.error(
+                `[${config.name}] Failed to reset localStorage:`,
+                error,
+              );
             }
           }
         }
-        
+
         return newState;
       }
 
@@ -194,13 +202,10 @@ function createReducer<T>(
   };
 }
 
-/**
- * Create a React Simple Schema State Machine (rssm) with provider and hook
- */
 export function createRssm<T>(name: string) {
   const Context = createContext<RssmContextValue<T> | undefined>(undefined);
 
-  function RssmProvider({ 
+  function RssmProvider({
     children,
     schema,
     name,
@@ -210,36 +215,44 @@ export function createRssm<T>(name: string) {
     encrypt = false,
     logging = false,
     logger = console,
-    debounceDelay = 500
+    debounceDelay = 500,
   }: RssmProviderProps<T>) {
-    const config: RssmConfig<T> = { name, schema, persist, ttl, encrypt, logging, logger };
-    
-    // Create debounced persist function
-    const debouncedPersist = useDebouncedCallback(
-      (state: State<T>) => {
-        try {
-          storage.set(config.name, state, { ttl: config.ttl || 0, encrypt: config.encrypt });
-          if (config.logging) {
-            logger.info(`[${config.name}] Debounced persist to localStorage`);
-          }
-        } catch (error) {
-          if (config.logging) {
-            logger.error(`[${config.name}] Failed to persist to localStorage:`, error);
-          }
+    const config: RssmConfig<T> = {
+      name,
+      schema,
+      persist,
+      ttl,
+      encrypt,
+      logging,
+      logger,
+    };
+
+    const debouncedPersist = useDebouncedCallback((state: State<T>) => {
+      try {
+        storage.set(config.name, state, {
+          ttl: config.ttl || 0,
+          encrypt: config.encrypt,
+        });
+        if (config.logging) {
+          logger.info(`[${config.name}] Debounced persist to localStorage`);
         }
-      },
-      debounceDelay
-    );
-    
+      } catch (error) {
+        if (config.logging) {
+          logger.error(
+            `[${config.name}] Failed to persist to localStorage:`,
+            error,
+          );
+        }
+      }
+    }, debounceDelay);
+
     const reducer = createReducer<T>(config, debouncedPersist);
-    
-    // Load initial state from localStorage if persist is enabled
+
     const getInitialState = (): State<T> => {
       if (persist) {
         try {
           const stored = storage.get<State<T>>(name);
           if (stored && stored.data) {
-            // Try to validate stored data against schema
             try {
               stored.data = schema.parse(stored.data);
               if (logging) {
@@ -247,7 +260,10 @@ export function createRssm<T>(name: string) {
               }
             } catch (error) {
               if (logging) {
-                logger.warn(`[${name}] Stored data failed schema validation, using as-is:`, error);
+                logger.warn(
+                  `[${name}] Stored data failed schema validation, using as-is:`,
+                  error,
+                );
               }
             }
             return stored;
@@ -258,32 +274,32 @@ export function createRssm<T>(name: string) {
           }
         }
       }
-      
-      // Validate initial data if provided
+
       let validatedInitialData = initialData;
       if (initialData) {
         try {
           validatedInitialData = schema.parse(initialData);
         } catch (error) {
           if (logging) {
-            logger.warn(`[${name}] Initial data failed schema validation, using as-is:`, error);
+            logger.warn(
+              `[${name}] Initial data failed schema validation, using as-is:`,
+              error,
+            );
           }
         }
       }
-      
+
       return {
         data: validatedInitialData,
         loading: false,
         error: null,
       };
     };
-    
+
     const [state, dispatch] = useReducer(reducer, getInitialState());
-    
-    // Cleanup on unmount
+
     useEffect(() => {
       return () => {
-        // Flush any pending debounced writes
         debouncedPersist.flush();
       };
     }, [debouncedPersist]);
@@ -297,7 +313,7 @@ export function createRssm<T>(name: string) {
 
   function useRssm(): RssmHookReturn<T> {
     const context = useContext(Context);
-    
+
     if (!context) {
       throw new Error(`${name} must be used within ${name}Provider`);
     }
@@ -309,10 +325,13 @@ export function createRssm<T>(name: string) {
       actions: {
         create: (data: T) => dispatch({ type: "CREATE", payload: data }),
         read: (data: T) => dispatch({ type: "READ", payload: data }),
-        update: (data: Partial<T>) => dispatch({ type: "UPDATE", payload: data }),
+        update: (data: Partial<T>) =>
+          dispatch({ type: "UPDATE", payload: data }),
         destroy: () => dispatch({ type: "DESTROY" }),
-        setLoading: (loading: boolean) => dispatch({ type: "SET_LOADING", payload: loading }),
-        setError: (error: string | null) => dispatch({ type: "SET_ERROR", payload: error }),
+        setLoading: (loading: boolean) =>
+          dispatch({ type: "SET_LOADING", payload: loading }),
+        setError: (error: string | null) =>
+          dispatch({ type: "SET_ERROR", payload: error }),
         reset: () => dispatch({ type: "RESET" }),
       },
     };
@@ -324,11 +343,10 @@ export function createRssm<T>(name: string) {
   };
 }
 
-// Re-export types
-export type { 
-  RssmProviderProps, 
-  RssmHookReturn, 
-  State, 
+export type {
+  RssmProviderProps,
+  RssmHookReturn,
+  State,
   Logger,
-  RssmActions 
+  RssmActions,
 } from "./types";
