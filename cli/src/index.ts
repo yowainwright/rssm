@@ -1,9 +1,8 @@
 #!/usr/bin/env node
 
 import { Command } from "commander";
-import { input, select, confirm } from "@inquirer/prompts";
+import { input, confirm } from "@inquirer/prompts";
 import chalk from "chalk";
-import { z } from "zod";
 import ora from "ora";
 import boxen from "boxen";
 import { highlight } from "cli-highlight";
@@ -14,8 +13,7 @@ import { parseJsonSchema } from "./schema-parser.js";
 
 const program = new Command();
 
-// Display banner
-const banner = figlet.textSync("RSSM", {
+const banner = figlet.textSync("rssm", {
   font: "Standard",
   horizontalLayout: "default",
   verticalLayout: "default",
@@ -27,7 +25,7 @@ console.log(gradient.pastel("React Simple Schema State Machine CLI\n"));
 program
   .name("rssm")
   .description("React Simple Schema State Machine CLI")
-  .version("1.0.0");
+  .version("0.0.1");
 
 program
   .command("create")
@@ -272,7 +270,7 @@ program
       },
     ];
 
-    examples.forEach((example, index) => {
+    examples.forEach((example) => {
       console.log(chalk.yellow.bold(example.title));
       console.log(chalk.gray(example.description));
       const highlightedCommand = highlight(example.command, {
@@ -327,7 +325,7 @@ program
         "  • Change configuration options (persistence, encryption, etc.)",
       ),
     );
-    console.log(chalk.gray("  • Migrate from older versions of Rssm\n"));
+    console.log(chalk.gray("  • Migrate from older versions of rssm\n"));
   });
 
 program.parse();

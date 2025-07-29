@@ -1,6 +1,6 @@
-# RSSM CLI Tests
+# rssm CLI Tests
 
-This directory contains tests for the RSSM CLI.
+This directory contains tests for the rssm CLI.
 
 ## Test Structure
 

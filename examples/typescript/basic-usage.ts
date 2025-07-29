@@ -1,5 +1,5 @@
-import { z } from 'zod';
-import { createRssm } from 'rssm';
+import { z } from "zod";
+import { createRssm } from "rssm";
 
 // Define your schema
 const userSchema = z.object({
@@ -12,7 +12,7 @@ const userSchema = z.object({
 type User = z.infer<typeof userSchema>;
 
 // Create the state machine
-const { RssmProvider, useRssm } = createRssm<User>('userState');
+const { RssmProvider, useRssm } = createRssm<User>("userState");
 
 // Export for use in your app
 export { RssmProvider as UserProvider, useRssm as useUser };

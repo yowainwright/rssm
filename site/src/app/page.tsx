@@ -7,13 +7,8 @@ import {
   Zap,
   Shield,
   Database,
-  Sparkles,
-  Terminal,
-  FileCode2,
   Braces,
   GitBranch,
-  Package,
-  Rocket,
 } from "lucide-react";
 
 export default function Home() {

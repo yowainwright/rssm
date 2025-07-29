@@ -1,6 +1,6 @@
 #!/bin/bash
 
-echo "🚀 RSSM CLI Demo - Creating State Machines"
+echo "🚀 rssm CLI Demo - Creating State Machines"
 echo "=========================================="
 echo ""
 

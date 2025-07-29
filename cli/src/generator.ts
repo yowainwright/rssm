@@ -18,17 +18,8 @@ interface GeneratorOptions {
 }
 
 export async function generateComponent(options: GeneratorOptions) {
-  const {
-    name,
-    typeName,
-    zodSchema,
-    persist,
-    logging,
-    encrypt,
-    ttl,
-    outputDir,
-    typescript,
-  } = options;
+  const { name, persist, logging, encrypt, ttl, outputDir, typescript } =
+    options;
 
   // Ensure output directory exists
   const dirSpinner = ora("Creating output directory...").start();
@@ -90,7 +81,6 @@ export async function generateComponent(options: GeneratorOptions) {
     throw error;
   }
 
-  // Summary box
   const summary = [
     chalk.green.bold("✨ Files Generated Successfully!"),
     "",
@@ -170,7 +160,7 @@ export type { ${typeName} };`
 }
 
 function generateExampleCode(options: GeneratorOptions): string {
-  const { name, typeName, typescript } = options;
+  const { name, typescript } = options;
 
   return `${typescript ? "import React from 'react';" : ""}
 import { ${name}Provider, use${name} } from './${name.toLowerCase()}';

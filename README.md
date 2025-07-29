@@ -20,7 +20,7 @@ If you're familiar with react context, don't need redux yet, and want a simple s
 - 🔄 **Loading & Error States** - Built-in loading and error state management
 - 🚀 **Lightweight** - Small bundle size
 - 🛠️ **CLI Generator** - CLI tool for generating state management components
-- 🎨 **Demo App** - Full-featured demo application with shadcn UI
+- 🎨 **Interactive Demo** - Full-featured demo in the documentation site with shadcn UI
 
 ## Installation
 
@@ -421,7 +421,7 @@ npx create-rssm example
 
 ## Demo Application
 
-Explore Rssm features with our demo application:
+Explore Rssm features with our interactive demo on the documentation site:
 
 ```bash
 # Clone the repository
@@ -434,11 +434,11 @@ bun install
 # Build the library
 bun run build:lib
 
-# Run the demo
-bun run dev:demo
+# Run the site locally (includes interactive demo)
+bun run dev:site
 ```
 
-The demo showcases:
+The site's interactive demo showcases:
 
 - User preferences with theme switching
 - Todo list with CRUD operations
@@ -854,8 +854,8 @@ bun test
 # Development mode
 bun run dev
 
-# Run the demo
-bun run dev:demo
+# Run the site locally (includes interactive demo)
+bun run dev:site
 
 # Develop the CLI
 bun run dev:cli
