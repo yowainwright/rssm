@@ -67,7 +67,7 @@
     "clsx": "^2.1.1",
     "eslint": "^9",
     "eslint-config-next": "15.4.4",
-    "happy-dom": "^18.0.1",
+    "happy-dom": "^20.8.9",
     "next": "15.4.4",
     "oxlint": "^1.8.0",
     "postcss": "^8.5.6",
